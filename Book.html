@@ -15,11 +15,13 @@
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: #9ca3af; }
         input, select { width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-family: var(--font-body); font-size: 1rem; outline: none; transition: border 0.3s; }
         input:focus, select:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+        select:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-submit { width: 100%; padding: 15px; background: rgba(0, 229, 255, 0.1); color: var(--neon-blue); border: 1px solid var(--neon-blue); border-radius: 8px; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
         .btn-submit:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
         .back-link { display: block; text-align: center; margin-top: 20px; color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
         .back-link:hover { color: var(--neon-red); }
         #statusMessage { text-align: center; margin-top: 15px; font-weight: 600; display: none; }
+        .time-warning { color: var(--neon-red); font-size: 0.8rem; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -30,23 +32,27 @@
                 <label>Player Name</label>
                 <input type="text" name="name" required placeholder="John Doe">
             </div>
+            
             <div style="display: flex; gap: 15px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Date</label>
-                    <input type="date" name="date" required>
+                    <input type="date" name="date" required min="" id="dateInput">
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>Time</label>
-                    <input type="time" name="time" required>
+                    <label>Start Time (11 AM - 11 PM)</label>
+                    <input type="time" name="time" id="timeInput" required>
+                    <div id="timeWarning" class="time-warning">Shop operates 11:00 AM to 11:00 PM</div>
                 </div>
             </div>
+
             <div class="form-group">
                 <label>Session Duration</label>
-                <select name="session">
-                    <option value="1 Hour">1 Hour Gaming</option>
-                    <option value="30 Minutes">30 Minutes Gaming</option>
+                <!-- Disabled by default until a valid time is picked -->
+                <select name="session" id="sessionDuration" required disabled>
+                    <option value="">Pick a start time first...</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label>Players</label>
                 <select name="players">
@@ -54,6 +60,7 @@
                     <option value="Co-Op">Co-Op (2 Players)</option>
                 </select>
             </div>
+            
             <button type="submit" class="btn-submit" id="submitBtn">Confirm Booking</button>
             <div id="statusMessage"></div>
         </form>
@@ -61,11 +68,67 @@
     </div>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycby9YnrJPFKfq4krbT8Q4Vs9JkDUa7Gjff_48aOXKyYG60KYt4qEDF6OWuvav_CsoZe4PA/exec';
+        // PASTE YOUR URL HERE
+        const scriptURL = 'PASTE_YOUR_URL_HERE';
+        
         const form = document.getElementById('bookingForm');
         const btn = document.getElementById('submitBtn');
         const status = document.getElementById('statusMessage');
+        const timeInput = document.getElementById('timeInput');
+        const sessionSelect = document.getElementById('sessionDuration');
+        const timeWarning = document.getElementById('timeWarning');
+        const dateInput = document.getElementById('dateInput');
 
+        // Prevent booking in the past by setting minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+
+        // Dynamic Time & Duration Calculator
+        timeInput.addEventListener('change', function() {
+            const timeVal = this.value;
+            if (!timeVal) return;
+
+            const [hours, mins] = timeVal.split(':').map(Number);
+            const timeInMins = hours * 60 + mins;
+            
+            const openMins = 11 * 60; // 11:00 AM (660 mins)
+            const closeMins = 23 * 60; // 11:00 PM (1380 mins)
+
+            // Validate if selected time is within shop hours
+            if (timeInMins < openMins || timeInMins >= closeMins) {
+                timeWarning.style.display = 'block';
+                this.value = '';
+                sessionSelect.innerHTML = '<option value="">Pick a start time first...</option>';
+                sessionSelect.disabled = true;
+                return;
+            }
+
+            // Valid time picked: remove warning and unlock duration select
+            timeWarning.style.display = 'none';
+            sessionSelect.disabled = false;
+            sessionSelect.innerHTML = ''; // Clear previous options
+
+            // Calculate remaining minutes until shop closes
+            const maxAvailableMins = closeMins - timeInMins;
+
+            // Generate 30-min intervals up to the closing time
+            for (let i = 30; i <= maxAvailableMins; i += 30) {
+                let hrs = Math.floor(i / 60);
+                let m = i % 60;
+                
+                let label = '';
+                if (hrs > 0) label += hrs + (hrs === 1 ? ' Hour ' : ' Hours ');
+                if (m > 0) label += m + ' Minutes';
+                if (hrs === 0) label = m + ' Minutes';
+
+                const option = document.createElement('option');
+                option.value = label.trim();
+                option.textContent = label.trim();
+                sessionSelect.appendChild(option);
+            }
+        });
+
+        // Submit form data securely to Google Sheets
         form.addEventListener('submit', e => {
             e.preventDefault();
             btn.innerText = 'Processing...';
@@ -77,6 +140,8 @@
                     status.style.color = '#00e5ff';
                     status.innerText = 'Booking confirmed! See you soon.';
                     form.reset();
+                    sessionSelect.innerHTML = '<option value="">Pick a start time first...</option>';
+                    sessionSelect.disabled = true;
                     btn.innerText = 'Confirm Booking';
                     btn.style.pointerEvents = 'auto';
                 })

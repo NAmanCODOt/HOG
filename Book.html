@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Console - House of Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-color: #07070b; --neon-blue: #00e5ff; --neon-red: #ff1744; --font-heading: 'Rajdhani', sans-serif; --font-body: 'Montserrat', sans-serif; }
+        body { background-color: var(--bg-color); color: #fff; font-family: var(--font-body); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .booking-container { background: rgba(20, 20, 28, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0, 229, 255, 0.3); border-radius: 16px; padding: 40px; width: 100%; max-width: 500px; box-shadow: 0 0 20px rgba(0, 229, 255, 0.1); }
+        h2 { font-family: var(--font-heading); font-size: 2.5rem; text-align: center; color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); margin-bottom: 30px; text-transform: uppercase; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: #9ca3af; }
+        input, select { width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-family: var(--font-body); font-size: 1rem; outline: none; transition: border 0.3s; }
+        input:focus, select:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+        .btn-submit { width: 100%; padding: 15px; background: rgba(0, 229, 255, 0.1); color: var(--neon-blue); border: 1px solid var(--neon-blue); border-radius: 8px; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-submit:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { color: var(--neon-red); }
+        #statusMessage { text-align: center; margin-top: 15px; font-weight: 600; display: none; }
+    </style>
+</head>
+<body>
+    <div class="booking-container">
+        <h2><i class="fa-solid fa-gamepad"></i> Reserve Console</h2>
+        <form id="bookingForm">
+            <div class="form-group">
+                <label>Player Name</label>
+                <input type="text" name="name" required placeholder="John Doe">
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Date</label>
+                    <input type="date" name="date" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Time</label>
+                    <input type="time" name="time" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Session Duration</label>
+                <select name="session">
+                    <option value="1 Hour">1 Hour Gaming</option>
+                    <option value="30 Minutes">30 Minutes Gaming</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Players</label>
+                <select name="players">
+                    <option value="Single Player">Single Player</option>
+                    <option value="Co-Op">Co-Op (2 Players)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit" id="submitBtn">Confirm Booking</button>
+            <div id="statusMessage"></div>
+        </form>
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby9YnrJPFKfq4krbT8Q4Vs9JkDUa7Gjff_48aOXKyYG60KYt4qEDF6OWuvav_CsoZe4PA/exec';
+        const form = document.getElementById('bookingForm');
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btn.innerText = 'Processing...';
+            btn.style.pointerEvents = 'none';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
+                .then(response => {
+                    status.style.display = 'block';
+                    status.style.color = '#00e5ff';
+                    status.innerText = 'Booking confirmed! See you soon.';
+                    form.reset();
+                    btn.innerText = 'Confirm Booking';
+                    btn.style.pointerEvents = 'auto';
+                })
+                .catch(error => {
+                    status.style.display = 'block';
+                    status.style.color = '#ff1744';
+                    status.innerText = 'Error saving booking. Please try again.';
+                    btn.innerText = 'Confirm Booking';
+                    btn.style.pointerEvents = 'auto';
+                });
+        });
+    </script>
+</body>
+</html>

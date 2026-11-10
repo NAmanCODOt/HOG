@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoG Admin Dashboard</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00e5ff">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #07070b; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0, 229, 255, 0.3); padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #00e5ff; margin: 0; }
+        .refresh-btn { background: #00e5ff; color: #000; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .booking-card { background: #1a1a24; padding: 15px; border-left: 4px solid #ffca28; border-radius: 8px; margin-bottom: 15px; }
+        .b-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; color: #00e5ff; }
+        .b-detail { font-size: 0.9rem; color: #ccc; margin-bottom: 5px; }
+        #loader { text-align: center; color: #00e5ff; display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Console</h1>
+        <button class="refresh-btn" onclick="fetchBookings()">Refresh</button>
+    </header>
+    <div id="loader">Syncing data...</div>
+    <div id="bookingsList"></div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby9YnrJPFKfq4krbT8Q4Vs9JkDUa7Gjff_48aOXKyYG60KYt4qEDF6OWuvav_CsoZe4PA/exec';
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+
+        function fetchBookings() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('bookingsList').innerHTML = '';
+            
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('loader').style.display = 'none';
+                    const list = document.getElementById('bookingsList');
+                    const records = data.slice(1).reverse(); 
+                    
+                    records.forEach(row => {
+                        list.innerHTML += `
+                            <div class="booking-card">
+                                <div class="b-header">
+                                    <span>${row[1]}</span>
+                                    <span>${row[2].substring(0, 10)} @ ${row[3].substring(11, 16)}</span>
+                                </div>
+                                <div class="b-detail">🎮 ${row[4]} | ${row[5]}</div>
+                            </div>
+                        `;
+                    });
+                });
+        }
+        
+        fetchBookings();
+    </script>
+</body>
+</html>

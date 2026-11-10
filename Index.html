@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House of Gaming</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --neon-blue: #00e5ff;
+            --neon-red: #ff1744;
+            --font-heading: 'Orbitron', sans-serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 23, 68, 0.08), transparent 25%);
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(5, 5, 5, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .logo i {
+            color: #ffca28; /* Crown color */
+            text-shadow: 0 0 15px #ffca28;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .btn-book {
+            padding: 10px 25px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid var(--neon-blue);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: var(--font-heading);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px inset transparent, 0 0 10px transparent;
+        }
+
+        .btn-book:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px inset var(--neon-blue), 0 0 20px var(--neon-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            margin-top: 50px;
+        }
+
+        .hero-crown {
+            font-size: 4rem;
+            color: #ffca28;
+            margin-bottom: -15px;
+            text-shadow: 0 0 20px #ffca28;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--neon-red);
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 .house {
+            text-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        .hero h1 .gaming {
+            text-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 100px 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .pricing-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .pricing-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 30px;
+            flex: 1;
+            min-width: 320px;
+            max-width: 450px;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.3s ease;
+        }
+
+        .pricing-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 1 Hour Card Styling */
+        .card-blue {
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0, 229, 255, 0.1);
+        }
+        
+        .card-blue:hover {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.6), inset 0 0 20px rgba(0, 229, 255, 0.2);
+        }
+
+        .card-blue .card-header {
+            color: var(--neon-blue);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* 30 Minutes Card Styling */
+        .card-red {
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.3), inset 0 0 15px rgba(255, 23, 68, 0.1);
+        }
+
+        .card-red:hover {
+            box-shadow: 0 0 25px rgba(255, 23, 68, 0.6), inset 0 0 20px rgba(255, 23, 68, 0.2);
+        }
+
+        .card-red .card-header {
+            color: var(--neon-red);
+            border-bottom: 1px solid rgba(255, 23, 68, 0.3);
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .card-header {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-info i {
+            font-size: 1.5rem;
+        }
+
+        .player-details h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .player-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .price-tag {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+            margin-top: 50px;
+        }
+
+        /* Keyframes */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide standard links on mobile */
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero-crown { font-size: 3rem; }
+            .hero-icon { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-crown"></i> House of Gaming
+        </a>
+        <div class="nav-links">
+            <a href="#pricing">Pricing</a>
+            <a href="Book.html" class="btn-book">Book a Console</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <i class="fa-solid fa-crown hero-crown"></i>
+        <i class="fa-solid fa-gamepad hero-icon"></i>
+        <h1>
+            <span class="house">House</span> <br>
+            <span style="font-size: 1.5rem; color: var(--text-muted); font-family: var(--font-body); letter-spacing: 5px;">OF</span> <br>
+            <span class="gaming">Gaming</span>
+        </h1>
+        <p>Experience the ultimate console gaming environment. Play solo or bring a friend and level up your weekend.</p>
+        <a href="Book.html" class="btn-book" style="padding: 15px 40px; font-size: 1.2rem;">Reserve Your Spot</a>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <h2 class="section-title">Select Your Session</h2>
+        
+        <div class="pricing-container">
+            
+            <!-- 1 Hour Gaming Card -->
+            <div class="pricing-card card-blue fade-in">
+                <div class="card-header">
+                    <i class="fa-solid fa-gamepad"></i> 1 Hour Gaming
+                </div>
+                
+                <div class="price-row">
+                    <div class="player-info">
+                        <i class="fa-regular fa-user"></i>
+                        <div class="player-details">
+                            <h3>Single Player</h3>
+                            <p>(1 Person)</p>
+                        </div>
+                    </div>
+                    <div class="price-tag">₹50</div>
+                </div>
+
+                <div class="price-row">
+                    <div class="player-info">
+                        <i class="fa-solid fa-user-group"></i>
+                        <div class="player-details">
+                            <h3>Co-Op</h3>
+                            <p>(2 Players)</p>
+                        </div>
+                    </div>
+                    <div class="price-tag">₹100</div>
+                </div>
+            </div>
+
+            <!-- 30 Minutes Gaming Card -->
+            <div class="pricing-card card-red fade-in">
+                <div class="card-header">
+                    <i class="fa-regular fa-clock"></i> 30 Minutes Gaming
+                </div>
+                
+                <div class="price-row">
+                    <div class="player-info">
+                        <i class="fa-regular fa-user"></i>
+                        <div class="player-details">
+                            <h3>Single Player</h3>
+                            <p>(1 Person)</p>
+                        </div>
+                    </div>
+                    <div class="price-tag">₹40</div>
+                </div>
+
+                <div class="price-row">
+                    <div class="player-info">
+                        <i class="fa-solid fa-user-group"></i>
+                        <div class="player-details">
+                            <h3>Co-Op</h3>
+                            <p>(2 Players)</p>
+                        </div>
+                    </div>
+                    <div class="price-tag">₹80</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 House of Gaming. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Animations -->
+    <script>
+        // Intersection Observer for scroll fade-in animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach((element) => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>

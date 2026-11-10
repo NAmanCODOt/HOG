@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>House of Gaming</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Upgraded Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #050505;
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
+            --bg-color: #07070b;
+            --text-main: #f4f4f5;
+            --text-muted: #9ca3af;
             --neon-blue: #00e5ff;
+            --neon-blue-dim: rgba(0, 229, 255, 0.2);
             --neon-red: #ff1744;
-            --font-heading: 'Orbitron', sans-serif;
-            --font-body: 'Poppins', sans-serif;
+            --neon-red-dim: rgba(255, 23, 68, 0.2);
+            --neon-gold: #ffca28;
+            --font-heading: 'Rajdhani', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
         }
 
         * {
@@ -30,161 +33,229 @@
             color: var(--text-main);
             font-family: var(--font-body);
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(255, 23, 68, 0.08), transparent 25%);
+            position: relative;
         }
+
+        /* Animated Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200vw;
+            height: 200vh;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+            z-index: -1;
+            transform: perspective(500px) rotateX(45deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(45deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(45deg) translateY(50px) translateZ(-200px); }
+        }
+
+        /* Ambient Glows */
+        .ambient-light {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .light-blue { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--neon-blue); }
+        .light-red { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--neon-red); }
 
         /* Navigation */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 5%;
-            background: rgba(5, 5, 5, 0.9);
+            padding: 20px 8%;
+            background: rgba(7, 7, 11, 0.8);
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #fff;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-shadow: 0 0 10px var(--neon-blue);
+            gap: 12px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px rgba(0, 229, 255, 0.5);
         }
 
         .logo i {
-            color: #ffca28; /* Crown color */
-            text-shadow: 0 0 15px #ffca28;
+            color: var(--neon-gold);
+            text-shadow: 0 0 10px var(--neon-gold), 0 0 20px rgba(255, 202, 40, 0.5);
         }
 
         .nav-links a {
             color: var(--text-main);
             text-decoration: none;
-            font-weight: 600;
-            margin-left: 30px;
-            transition: color 0.3s ease;
+            font-weight: 500;
+            margin-left: 35px;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
         }
 
         .nav-links a:hover {
             color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
         }
 
         .btn-book {
-            padding: 10px 25px;
-            background: transparent;
-            color: #fff;
-            border: 2px solid var(--neon-blue);
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
+            padding: 12px 28px;
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--neon-blue) !important;
+            border: 1px solid var(--neon-blue);
+            border-radius: 4px;
             font-family: var(--font-heading);
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px inset transparent, 0 0 10px transparent;
+            font-size: 1.1rem !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 10px var(--neon-blue-dim);
         }
 
         .btn-book:hover {
             background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 15px inset var(--neon-blue), 0 0 20px var(--neon-blue);
+            color: #000 !important;
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
+            transform: translateY(-2px);
         }
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 20px;
-            margin-top: 50px;
+            padding: 100px 20px 50px;
         }
 
         .hero-crown {
-            font-size: 4rem;
-            color: #ffca28;
-            margin-bottom: -15px;
-            text-shadow: 0 0 20px #ffca28;
-            animation: float 3s ease-in-out infinite;
+            font-size: 5rem;
+            color: var(--neon-gold);
+            margin-bottom: -10px;
+            filter: drop-shadow(0 0 15px var(--neon-gold));
+            animation: pulseCrown 3s ease-in-out infinite;
         }
 
         .hero-icon {
-            font-size: 5rem;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px var(--neon-red);
+            font-size: 6rem;
+            color: transparent;
+            -webkit-text-stroke: 2px #fff;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 15px var(--neon-red));
         }
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: 4rem;
-            line-height: 1.1;
+            font-size: 5.5rem;
+            line-height: 1;
             margin-bottom: 20px;
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .hero h1 .house {
-            text-shadow: 0 0 20px var(--neon-blue);
+        .hero h1 .house, .hero h1 .gaming {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px var(--neon-blue),
+                0 0 40px var(--neon-blue);
         }
 
-        .hero h1 .gaming {
-            text-shadow: 0 0 20px var(--neon-blue);
+        .hero h1 .of {
+            font-size: 2rem;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            letter-spacing: 8px;
+            display: block;
+            margin: 10px 0;
+            text-shadow: none;
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
             max-width: 600px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            line-height: 1.6;
         }
 
         /* Pricing Section */
         .pricing-section {
-            padding: 100px 5%;
+            padding: 80px 8%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         .section-title {
             font-family: var(--font-heading);
-            font-size: 2.5rem;
-            margin-bottom: 50px;
+            font-size: 3rem;
+            margin-bottom: 60px;
             text-align: center;
             letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
         .pricing-container {
             display: flex;
-            gap: 40px;
+            gap: 50px;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 1000px;
+            max-width: 1200px;
             width: 100%;
         }
 
+        /* Premium Glassmorphism Cards */
         .pricing-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 30px;
+            background: rgba(20, 20, 28, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 40px;
             flex: 1;
-            min-width: 320px;
-            max-width: 450px;
-            position: relative;
-            transform: translateY(50px);
+            min-width: 340px;
+            max-width: 480px;
+            transform: translateY(40px);
             opacity: 0;
-            transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.3s ease;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 16px;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .pricing-card.show {
@@ -192,124 +263,159 @@
             opacity: 1;
         }
 
-        /* 1 Hour Card Styling */
+        /* 1 Hour Card - Blue Neon */
         .card-blue {
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0, 229, 255, 0.1);
+            border: 2px solid rgba(0, 229, 255, 0.5);
+            box-shadow: 
+                0 0 15px var(--neon-blue-dim), 
+                inset 0 0 20px var(--neon-blue-dim);
         }
         
         .card-blue:hover {
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.6), inset 0 0 20px rgba(0, 229, 255, 0.2);
+            border-color: var(--neon-blue);
+            box-shadow: 
+                0 0 20px rgba(0, 229, 255, 0.4),
+                0 0 40px rgba(0, 229, 255, 0.2),
+                inset 0 0 30px rgba(0, 229, 255, 0.2);
+            transform: translateY(-5px);
         }
 
         .card-blue .card-header {
             color: var(--neon-blue);
-            border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
             text-shadow: 0 0 10px var(--neon-blue);
         }
 
-        /* 30 Minutes Card Styling */
+        /* 30 Minutes Card - Red Neon */
         .card-red {
-            border: 2px solid var(--neon-red);
-            box-shadow: 0 0 15px rgba(255, 23, 68, 0.3), inset 0 0 15px rgba(255, 23, 68, 0.1);
+            border: 2px solid rgba(255, 23, 68, 0.5);
+            box-shadow: 
+                0 0 15px var(--neon-red-dim), 
+                inset 0 0 20px var(--neon-red-dim);
         }
 
         .card-red:hover {
-            box-shadow: 0 0 25px rgba(255, 23, 68, 0.6), inset 0 0 20px rgba(255, 23, 68, 0.2);
+            border-color: var(--neon-red);
+            box-shadow: 
+                0 0 20px rgba(255, 23, 68, 0.4),
+                0 0 40px rgba(255, 23, 68, 0.2),
+                inset 0 0 30px rgba(255, 23, 68, 0.2);
+            transform: translateY(-5px);
         }
 
         .card-red .card-header {
             color: var(--neon-red);
-            border-bottom: 1px solid rgba(255, 23, 68, 0.3);
+            border-bottom: 1px solid rgba(255, 23, 68, 0.2);
             text-shadow: 0 0 10px var(--neon-red);
         }
 
         .card-header {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+            padding-bottom: 25px;
+            margin-bottom: 25px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .price-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            margin-bottom: 10px;
         }
 
-        .price-row:last-child {
-            border-bottom: none;
+        .price-row:hover {
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .player-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .player-info i {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            color: #fff;
         }
 
         .player-details h3 {
-            font-size: 1.1rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .player-details p {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            margin-top: 2px;
         }
 
         .price-tag {
             font-family: var(--font-heading);
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: #000;
-            margin-top: 50px;
+            padding: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin-top: 80px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
         }
 
         /* Keyframes */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        @keyframes pulseCrown {
+            0% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-gold)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px var(--neon-gold)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-gold)); }
         }
 
         /* Responsive Design */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 4rem; }
+            .pricing-container { gap: 30px; }
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none; /* Hide standard links on mobile */
-            }
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            .hero-crown { font-size: 3rem; }
-            .hero-icon { font-size: 4rem; }
+            nav { padding: 15px 5%; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .hero-crown { font-size: 4rem; }
+            .hero-icon { font-size: 5rem; }
+            .pricing-card { padding: 30px 20px; }
+            .card-header { font-size: 1.6rem; }
+            .price-tag { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Ambient Background Lights -->
+    <div class="ambient-light light-blue"></div>
+    <div class="ambient-light light-red"></div>
+
     <!-- Navigation -->
     <nav>
         <a href="#" class="logo">
-            <i class="fa-solid fa-crown"></i> House of Gaming
+            <i class="fa-solid fa-crown"></i> HOUSE OF GAMING
         </a>
         <div class="nav-links">
             <a href="#pricing">Pricing</a>
@@ -322,12 +428,12 @@
         <i class="fa-solid fa-crown hero-crown"></i>
         <i class="fa-solid fa-gamepad hero-icon"></i>
         <h1>
-            <span class="house">House</span> <br>
-            <span style="font-size: 1.5rem; color: var(--text-muted); font-family: var(--font-body); letter-spacing: 5px;">OF</span> <br>
+            <span class="house">House</span>
+            <span class="of">OF</span>
             <span class="gaming">Gaming</span>
         </h1>
-        <p>Experience the ultimate console gaming environment. Play solo or bring a friend and level up your weekend.</p>
-        <a href="Book.html" class="btn-book" style="padding: 15px 40px; font-size: 1.2rem;">Reserve Your Spot</a>
+        <p>Experience the ultimate console gaming environment. Immersive visuals, lag-free hardware, and a premium neon atmosphere. Solo or Co-op, level up your weekend.</p>
+        <a href="Book.html" class="btn-book" style="padding: 16px 45px; font-size: 1.2rem !important; margin-top: 10px;">Reserve Your Spot</a>
     </section>
 
     <!-- Pricing Section -->
@@ -350,7 +456,8 @@
                             <p>(1 Person)</p>
                         </div>
                     </div>
-                    <div class="price-tag">₹50</div>
+                    <!-- HTML Entity &#8377; used below for perfect Rupee rendering -->
+                    <div class="price-tag">&#8377;50</div> 
                 </div>
 
                 <div class="price-row">
@@ -361,7 +468,7 @@
                             <p>(2 Players)</p>
                         </div>
                     </div>
-                    <div class="price-tag">₹100</div>
+                    <div class="price-tag">&#8377;100</div>
                 </div>
             </div>
 
@@ -379,7 +486,7 @@
                             <p>(1 Person)</p>
                         </div>
                     </div>
-                    <div class="price-tag">₹40</div>
+                    <div class="price-tag">&#8377;40</div>
                 </div>
 
                 <div class="price-row">
@@ -390,7 +497,7 @@
                             <p>(2 Players)</p>
                         </div>
                     </div>
-                    <div class="price-tag">₹80</div>
+                    <div class="price-tag">&#8377;80</div>
                 </div>
             </div>
 
@@ -408,7 +515,7 @@
         const observerOptions = {
             root: null,
             rootMargin: '0px',
-            threshold: 0.2
+            threshold: 0.15
         };
 
         const observer = new IntersectionObserver((entries, observer) => {
